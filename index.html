@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Painel Power BI: passo a passo | J.A.V.A. Treinamentos</title>
+  <style>
+    :root { --wine:#800000; --wine-dark:#550000; --ink:#241e1d; --muted:#665e5a; --paper:#fffdfb; --cream:#f8f1ed; --line:#e9dbd5; --soft:#f3e8e2; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.58 Arial,Helvetica,sans-serif; }
+    a { color:var(--wine); }
+    button { font:inherit; }
+    .wrap { width:min(1120px,calc(100% - 40px)); margin:auto; }
+    .topbar { background:#fff; border-bottom:1px solid var(--line); }
+    .topbar .wrap { display:flex; align-items:center; justify-content:space-between; gap:22px; padding:18px 0; }
+    .brand { color:var(--wine-dark); font-size:14px; font-weight:800; letter-spacing:.13em; text-decoration:none; text-transform:uppercase; }
+    .topnav { display:flex; flex-wrap:wrap; gap:20px; font-size:13px; font-weight:700; }
+    .topnav a { text-decoration:none; }
+    .hero { padding:60px 0; background:linear-gradient(135deg,#fff 20%,#fff4ef 100%); border-bottom:1px solid var(--line); }
+    .hero-grid { display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:44px; }
+    .eyebrow { display:inline-block; color:var(--wine); font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
+    h1,h2,h3 { line-height:1.15; letter-spacing:-.025em; }
+    h1 { margin:14px 0 20px; max-width:670px; font-size:clamp(38px,4.8vw,61px); }
+    h2 { margin:8px 0 14px; font-size:clamp(27px,3vw,38px); }
+    h3 { margin:0 0 10px; font-size:23px; }
+    p { margin:0 0 16px; }
+    .lead { max-width:640px; color:#4c403e; font-size:19px; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; }
+    .button { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:10px 18px; border:1px solid var(--wine); border-radius:9px; background:var(--wine); color:#fff; font-weight:700; text-decoration:none; }
+    .button:hover { background:var(--wine-dark); }
+    .button.secondary { background:#fff; color:var(--wine); }
+    .button.secondary:hover { background:var(--cream); }
+    .hero-note { margin-top:14px; color:var(--muted); font-size:14px; }
+    .goal { padding:22px; border:1px solid var(--line); border-radius:18px; background:#fff; box-shadow:0 18px 48px rgba(70,20,20,.09); }
+    .goal-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:15px; color:var(--wine-dark); font-size:14px; font-weight:800; }
+    .goal-head small { color:var(--muted); font-size:11px; font-weight:400; }
+    .goal-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .mini-card { min-height:79px; padding:11px; border:1px solid var(--line); border-radius:9px; background:#fffaf7; }
+    .mini-card span { display:block; color:var(--muted); font-size:10px; line-height:1.25; }
+    .mini-card strong { display:block; margin-top:8px; color:var(--wine); font-size:clamp(12px,1.4vw,18px); line-height:1.2; white-space:nowrap; }
+    .mini-chart { margin-top:10px; padding:12px; border:1px solid var(--line); border-radius:9px; }
+    .mini-chart b { display:block; margin-bottom:10px; font-size:12px; }
+    .bar-row { display:grid; grid-template-columns:88px 1fr; align-items:center; gap:7px; margin:6px 0; font-size:10px; }
+    .bar-track { height:9px; overflow:hidden; border-radius:20px; background:#f2eae6; }
+    .bar-track i { display:block; height:100%; border-radius:20px; background:var(--wine); }
+    .goal-caption { margin:11px 0 0; color:var(--muted); font-size:11px; }
+    .section { padding:60px 0; }
+    .section.tint { background:var(--cream); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .section-intro { max-width:820px; margin-bottom:27px; color:var(--muted); }
+    .three { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .info-card { padding:20px; border:1px solid var(--line); border-radius:13px; background:#fff; }
+    .info-card .number { display:inline-grid; place-items:center; width:31px; height:31px; margin-bottom:14px; border-radius:50%; background:var(--soft); color:var(--wine); font-weight:800; }
+    .info-card h3 { font-size:19px; }
+    .info-card p { margin:0; color:var(--muted); font-size:14px; }
+    .step { display:grid; grid-template-columns:110px 1fr; gap:28px; padding:38px 0; border-top:1px solid var(--line); scroll-margin-top:18px; }
+    .step:first-of-type { border-top:0; }
+    .step-index { color:var(--wine); font-size:31px; font-weight:800; line-height:1.1; white-space:nowrap; }
+    .step-body { max-width:870px; }
+    .step-body > p { color:#4e4240; }
+    ol { margin:17px 0 22px; padding-left:33px; }
+    li { padding-left:5px; margin:9px 0; }
+    ol li::marker { color:var(--wine); font-weight:800; }
+    .field { display:inline-block; padding:1px 7px; border-radius:5px; background:var(--soft); color:var(--wine-dark); font-weight:700; white-space:nowrap; }
+    .callout { margin:20px 0; padding:14px 17px; border-left:4px solid var(--wine); border-radius:0 8px 8px 0; background:#fbf3ef; }
+    .callout p:last-child { margin:0; }
+    .prompt { margin:20px 0; padding:17px; border:1px solid #d9c0b8; border-radius:11px; background:#fff; }
+    .prompt-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:9px; }
+    .prompt-label { color:var(--wine); font-size:12px; font-weight:800; letter-spacing:.11em; text-transform:uppercase; }
+    .copy { padding:5px 10px; border:1px solid var(--line); border-radius:7px; background:#fff; color:var(--wine); font-size:12px; font-weight:700; cursor:pointer; }
+    .copy:hover { background:var(--cream); }
+    .prompt blockquote { margin:0; color:#453a38; font-size:14px; }
+    .prints { margin:22px 0 0; border:1px solid var(--line); border-radius:11px; background:#fff; }
+    .prints summary { padding:13px 16px; color:var(--wine); font-size:14px; font-weight:800; cursor:pointer; }
+    .prints[open] summary { border-bottom:1px solid var(--line); }
+    .print-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; padding:14px; }
+    .print-grid a { display:block; padding:7px; border:1px solid var(--line); border-radius:8px; color:var(--ink); text-decoration:none; }
+    .print-grid img { display:block; width:100%; height:auto; border-radius:4px; }
+    .print-grid span { display:block; padding:5px 3px 2px; color:var(--muted); font-size:12px; }
+    .check-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:18px 0; }
+    .check { padding:18px; border:1px solid var(--line); border-radius:11px; background:#fff; }
+    .check span { display:block; color:var(--muted); font-size:13px; }
+    .check strong { display:block; margin-top:5px; color:var(--wine); font-size:22px; }
+    .checklist { padding:18px 22px; border:1px solid var(--line); border-radius:11px; background:#fff; }
+    .checklist li { list-style:"✓  "; }
+    .footer { padding:30px 0 40px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }
+    .footer .wrap { display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px; }
+    @media (max-width:800px) { .hero-grid,.three { grid-template-columns:1fr; } .goal { max-width:550px; } .step { grid-template-columns:1fr; gap:9px; } .check-grid { grid-template-columns:1fr; } }
+    @media (max-width:600px) { .wrap { width:min(100% - 28px,1120px); } .topnav { display:none; } .hero,.section { padding:40px 0; } .goal-cards { gap:5px; } .mini-card { padding:8px; } .mini-card strong { font-size:11px; } .bar-row { grid-template-columns:72px 1fr; } .print-grid { grid-template-columns:1fr; } }
+    @media print { html { scroll-behavior:auto; } body { background:#fff; font-size:12px; } .topnav,.hero-actions,.copy,.prints { display:none !important; } .hero,.section { padding:22px 0; } .hero-grid { grid-template-columns:1fr 1fr; gap:20px; } .goal { box-shadow:none; } .step { break-inside:avoid; padding:18px 0; } .prompt,.info-card,.check { break-inside:avoid; } a { color:inherit; text-decoration:none; } }
+  </style>
+</head>
+<body>
+  <header class="topbar"><div class="wrap"><a class="brand" href="#inicio">J.A.V.A. Treinamentos</a><nav class="topnav" aria-label="Navegação"><a href="#objetivo">Objetivo</a><a href="#importar">Importar</a><a href="#cartoes">Cartões</a><a href="#graficos">Gráficos</a><a href="#salvar">Salvar</a></nav></div></header>
+  <main id="inicio">
+    <section class="hero"><div class="wrap hero-grid">
+      <div><span class="eyebrow">Apostila atualizada · 11/10/2026</span><h1>Do Excel ao painel em uma página.</h1><p class="lead">Siga as telas do passo a passo: carregue a tabela, crie três cartões, monte dois gráficos de colunas empilhadas e salve seu relatório no Power BI Desktop.</p><div class="hero-actions"><a class="button" href="Base_Faturamento_JAVA_Limpa.xlsx" download>Baixar a base do exercício</a><a class="button secondary" href="#importar">Começar</a></div><p class="hero-note">Base pronta · 9 registros fictícios · ChatGPT como apoio para dúvidas</p></div>
+      <div class="goal" aria-label="Prévia ilustrativa do painel final"><div class="goal-head"><span>Painel de faturamento</span><small>Prévia ilustrativa</small></div><div class="goal-cards"><div class="mini-card"><span>Faturado</span><strong>R$ 126.155,33</strong></div><div class="mini-card"><span>Glosado</span><strong>R$ 31.402,79</strong></div><div class="mini-card"><span>Recebido</span><strong>R$ 94.752,54</strong></div></div><div class="mini-chart"><b>Valor faturado por convênio</b><div class="bar-row"><span>UNIMED</span><span class="bar-track"><i style="width:100%"></i></span></div><div class="bar-row"><span>IPASGO</span><span class="bar-track"><i style="width:87%"></i></span></div></div><div class="mini-chart"><b>Valor glosado por hospital</b><div class="bar-row"><span>Sudeste</span><span class="bar-track"><i style="width:100%"></i></span></div><div class="bar-row"><span>Centro</span><span class="bar-track"><i style="width:1.3%"></i></span></div><div class="bar-row"><span>Demais</span><span class="bar-track"><i style="width:0%"></i></span></div></div><p class="goal-caption">Organização dos visuais. As capturas reais do roteiro aparecem em cada etapa abaixo.</p></div>
+    </div></section>
+    <section class="section tint" id="objetivo"><div class="wrap"><span class="eyebrow">O exercício</span><h2>O que você vai fazer</h2><p class="section-intro">Este guia acompanha a sequência do PDF “Painel Power BI 11-10-2026”. Os prints originais ficam recolhidos em cada etapa; abra quando quiser comparar sua tela com a demonstração.</p><div class="three"><div class="info-card"><span class="number">1</span><h3>Importar</h3><p>Escolher a planilha e carregar a tabela <strong>Tabela1</strong>, já preparada para este exercício.</p></div><div class="info-card"><span class="number">2</span><h3>Três cartões</h3><p>Mostrar faturado, glosado e recebido nessa ordem, usando a soma de cada campo.</p></div><div class="info-card"><span class="number">3</span><h3>Dois gráficos</h3><p>Comparar faturamento por convênio e glosa por hospital em colunas empilhadas.</p></div></div></div></section>
+    <section class="section" id="passos"><div class="wrap"><span class="eyebrow">Passo a passo</span><h2>Reproduza o painel</h2><p class="section-intro">Use a base disponível no botão acima. A sequência segue os 35 cliques mostrados no PDF, com nomes mais claros nos pontos em que a captura diz apenas “clique aqui”.</p>
+      <article class="step" id="importar"><div class="step-index">01–11</div><div class="step-body"><h3>Abra o Power BI e carregue a tabela</h3><ol start="1"><li>Abra o <strong>Power BI Desktop</strong>.</li><li>Na tela inicial, clique em <strong>Relatório em branco</strong>.</li><li>Escolha <strong>Pasta de trabalho do Excel</strong>.</li><li>Na configuração da fonte de dados, clique em <strong>Procurar</strong>.</li><li>Abra a <strong>Área de Trabalho</strong> ou a pasta onde você salvou a base.</li><li>Navegue até a posição do arquivo.</li><li>Selecione <strong>Base_Faturamento_JAVA_Limpa.xlsx</strong>.</li><li>Clique em <strong>Abrir</strong>.</li><li>Se aparecer uma tela intermediária, clique em <strong>Próximo</strong>.</li><li>No Navegador, marque <span class="field">Tabela1</span>. A aba <span class="field">FATURAMENTO</span> também pode aparecer: escolha a <strong>tabela</strong>, como no PDF.</li><li>Clique em <strong>Load</strong> ou <strong>Carregar</strong> para trazer os dados ao relatório.</li></ol><div class="callout"><p><strong>A base já está pronta.</strong> Neste roteiro, você não precisa abrir o Power Query nem limpar os dados. Caso sua tela mostre nomes de botões um pouco diferentes, siga a função indicada em cada passo.</p></div><div class="prompt"><div class="prompt-top"><span class="prompt-label">🤖 Dica do ChatGPT</span><button class="copy" type="button">Copiar prompt</button></div><blockquote>Estou no Power BI Desktop e quero importar a planilha Base_Faturamento_JAVA_Limpa.xlsx. No Navegador aparecem Tabela1 e FATURAMENTO. Explique como selecionar Tabela1 e carregar os dados. Se minha tela for diferente, peça que eu descreva o que vejo.</blockquote></div><details class="prints" data-start="2" data-end="11"><summary>Ver os prints da importação (páginas 2 a 11 do PDF)</summary><div class="print-grid"></div></details></div></article>
+      <article class="step" id="cartoes"><div class="step-index">12–23</div><div class="step-body"><h3>Crie os cartões: faturado, glosado e recebido</h3><ol start="12"><li>No painel <strong>Dados</strong>, expanda <span class="field">Tabela1</span> para ver seus campos.</li><li>Com a página vazia selecionada, clique no visual <strong>Cartão</strong>.</li><li>Adicione <span class="field">Valor faturado</span>. O primeiro cartão deve mostrar a <strong>Soma</strong> do faturado.</li><li>Clique numa área em branco do relatório para desmarcar o cartão.</li><li>Selecione <span class="field">Valor glosado</span>.</li><li>Escolha novamente o visual <strong>Cartão</strong>, caso o Power BI tenha criado outro tipo de visual.</li><li>Posicione o cartão de glosa ao lado do faturado.</li><li>Clique numa área em branco do relatório.</li><li>Insira mais um visual <strong>Cartão</strong>.</li><li>Adicione <span class="field">Valor recebido</span>.</li><li>Posicione o terceiro cartão ao lado dos outros dois.</li><li>Clique numa área em branco para encerrar a edição dos cartões.</li></ol><div class="callout"><p><strong>Confira “Soma”.</strong> Os três campos devem ser resumidos por soma, não por contagem ou média. O PDF mostra valores abreviados como “126,16 Mil”; a conferência com valores completos está no fim desta página.</p></div><div class="prompt"><div class="prompt-top"><span class="prompt-label">🤖 Dica do ChatGPT</span><button class="copy" type="button">Copiar prompt</button></div><blockquote>Estou criando três cartões separados no Power BI, nesta ordem: Soma de Valor faturado, Soma de Valor glosado e Soma de Valor recebido. Explique como adicionar um cartão por vez e conferir se a agregação está em Soma. Pare após cada cartão para eu comparar a tela.</blockquote></div><details class="prints" data-start="12" data-end="23"><summary>Ver os prints dos cartões (páginas 12 a 23 do PDF)</summary><div class="print-grid"></div></details></div></article>
+      <article class="step" id="graficos"><div class="step-index">24–33</div><div class="step-body"><h3>Crie os dois gráficos de colunas empilhadas</h3><ol start="24"><li>Clique numa área vazia e escolha <strong>Gráfico de colunas empilhadas</strong>.</li><li>Adicione <span class="field">Convênio</span> ao <strong>Eixo X</strong>.</li><li>Adicione <span class="field">Valor faturado</span> ao <strong>Eixo Y</strong> e confira <strong>Soma</strong>.</li><li>Confira o gráfico <strong>Soma de Valor faturado por Convênio</strong>, com UNIMED e IPASGO.</li><li>Clique numa área em branco do relatório.</li><li>Insira outro <strong>Gráfico de colunas empilhadas</strong>.</li><li>Adicione <span class="field">Hospital</span> ao <strong>Eixo X</strong>.</li><li>Adicione <span class="field">Valor glosado</span> ao <strong>Eixo Y</strong> e confira <strong>Soma</strong>.</li><li>Confira o gráfico <strong>Soma de Valor glosado por Hospital</strong>.</li><li>Clique numa área em branco e organize os gráficos abaixo dos três cartões.</li></ol><div class="callout"><p><strong>Atenção ao segundo gráfico:</strong> ele usa <strong>Valor glosado</strong> por Hospital, como no seu novo PDF. Não repita o campo Valor faturado nesse gráfico.</p></div><div class="prompt"><div class="prompt-top"><span class="prompt-label">🤖 Dica do ChatGPT</span><button class="copy" type="button">Copiar prompt</button></div><blockquote>Preciso criar dois gráficos de colunas empilhadas no Power BI: Soma de Valor faturado por Convênio e Soma de Valor glosado por Hospital. Diga exatamente qual campo vai no Eixo X e no Eixo Y em cada gráfico e como verificar a agregação Soma.</blockquote></div><details class="prints" data-start="24" data-end="33"><summary>Ver os prints dos gráficos (páginas 24 a 33 do PDF)</summary><div class="print-grid"></div></details></div></article>
+      <article class="step" id="salvar"><div class="step-index">34–35</div><div class="step-body"><h3>Salve o relatório</h3><ol start="34"><li>No canto superior esquerdo, clique em <strong>Arquivo</strong>.</li><li>Escolha <strong>Salvar</strong> ou <strong>Salvar como</strong> e guarde o projeto no computador como <strong>Painel_Faturamento_JAVA.pbix</strong>.</li></ol><div class="prompt"><div class="prompt-top"><span class="prompt-label">🤖 Dica do ChatGPT</span><button class="copy" type="button">Copiar prompt</button></div><blockquote>Terminei meu painel no Power BI Desktop. Explique como salvar o relatório em formato .pbix e como encontrá-lo depois no computador. Não quero publicar o relatório na internet.</blockquote></div><details class="prints" data-start="34" data-end="35"><summary>Ver os prints do salvamento (páginas 34 e 35 do PDF)</summary><div class="print-grid"></div></details></div></article>
+    </div></section>
+    <section class="section tint" id="conferencia"><div class="wrap"><span class="eyebrow">Conferência final</span><h2>Seu painel está como no roteiro?</h2><p class="section-intro">Com a base inteira carregada e nenhum filtro aplicado, os cartões devem mostrar estes totais:</p><div class="check-grid"><div class="check"><span>Valor faturado</span><strong>R$ 126.155,33</strong></div><div class="check"><span>Valor glosado</span><strong>R$ 31.402,79</strong></div><div class="check"><span>Valor recebido</span><strong>R$ 94.752,54</strong></div></div><ul class="checklist"><li>Há três cartões no topo, na ordem faturado, glosado e recebido.</li><li>O primeiro gráfico mostra faturamento por convênio.</li><li>O segundo gráfico mostra glosa por hospital.</li><li>Os dois são gráficos de colunas empilhadas e usam a agregação <strong>Soma</strong>.</li><li>O relatório foi salvo como arquivo <strong>.pbix</strong>.</li></ul><div class="prompt"><div class="prompt-top"><span class="prompt-label">🤖 Se algo não bater</span><button class="copy" type="button">Copiar prompt</button></div><blockquote>Meu painel deveria mostrar R$ 126.155,33 faturados, R$ 31.402,79 glosados e R$ 94.752,54 recebidos. Tenho três cartões e dois gráficos de colunas empilhadas, mas algum resultado está diferente. Ajude-me a conferir tabela importada, campo escolhido, agregação Soma e filtros, uma verificação por vez.</blockquote></div></div></section>
+  </main>
+  <footer class="footer"><div class="wrap"><span>J.A.V.A. Treinamentos · Exercício com dados fictícios</span><span>Roteiro atualizado a partir de “Painel Power BI 11-10-2026”</span></div></footer>
+  <script>
+    document.querySelectorAll('.prompt .copy').forEach(button => button.addEventListener('click', async () => {
+      const message = button.closest('.prompt').querySelector('blockquote').textContent.trim();
+      try {
+        if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(message);
+        else {
+          const box = document.createElement('textarea'); box.value = message; box.style.position = 'fixed'; box.style.opacity = '0'; document.body.appendChild(box); box.select();
+          if (!document.execCommand('copy')) throw new Error('Cópia indisponível'); box.remove();
+        }
+        const previous = button.textContent; button.textContent = 'Copiado!'; setTimeout(() => button.textContent = previous, 1800);
+      } catch { button.textContent = 'Selecione o texto'; }
+    }));
+    document.querySelectorAll('.prints').forEach(group => {
+      const grid = group.querySelector('.print-grid');
+      for (let page = Number(group.dataset.start); page <= Number(group.dataset.end); page++) {
+        const number = String(page).padStart(2,'0');
+        const link = document.createElement('a'); link.href = `prints/pagina-${number}.jpg`; link.target = '_blank'; link.rel = 'noopener';
+        const img = document.createElement('img'); img.src = link.href; img.loading = 'lazy'; img.alt = `Página ${page} do passo a passo em PDF`;
+        const caption = document.createElement('span'); caption.textContent = `Página ${page} do PDF · abrir em tamanho maior`;
+        link.append(img, caption); grid.appendChild(link);
+      }
+    });
+  </script>
+</body>
+</html>
